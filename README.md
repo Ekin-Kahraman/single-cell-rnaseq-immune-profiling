@@ -1,73 +1,61 @@
 # Single-Cell RNA-seq Immune Cell Profiling
 
-End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Demonstrates quality control, normalisation, dimensionality reduction, clustering with automated resolution selection, and marker-based cell type annotation on human PBMC data.
+End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Quality control, normalisation, dimensionality reduction, unsupervised clustering with automated resolution selection, and marker-based cell type annotation on human peripheral blood mononuclear cells.
 
 <p align="center">
   <img src="docs/umap_3d_rotation.gif" alt="3D UMAP rotation showing PBMC immune cell clusters" width="600">
 </p>
 
 <details>
-<summary>Publication figure (static)</summary>
+<summary>Static publication figure</summary>
 
 ![Publication Figure](docs/publication_figure.png)
+
+**Panel A** — UMAP coloured by unsupervised Leiden clusters. **Panel B** — Same embedding coloured by assigned cell type. **Panel C** — Cell type proportions. **Panel D** — Z-scored expression of canonical marker genes per cell type (red = high, blue = low). **Panel E** — Summary statistics.
 </details>
 
 ## Dataset
 
-**10X Genomics PBMC 3k** -- 2,700 peripheral blood mononuclear cells from a healthy donor, sequenced on the Chromium platform. A standard benchmark dataset for single-cell analysis pipelines.
+**10X Genomics PBMC 3k** — 2,700 peripheral blood mononuclear cells from a healthy donor, sequenced on the Chromium platform. This is the standard benchmark dataset used across [scanpy](https://scanpy-tutorials.readthedocs.io/en/latest/pbmc3k.html), [Seurat](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html), and other single-cell frameworks.
 
-- **Source**: [10X Genomics](https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k)
-- **Reference**: Zheng et al. (2017) *Nature Communications*
+- **Direct download**: [filtered gene-barcode matrices](https://cf.10xgenomics.com/samples/cell-exp/1.1.0/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) (5.9 MB)
+- **Reference**: Zheng et al. (2017) [Massively parallel digital transcriptional profiling of single cells](https://doi.org/10.1038/ncomms14049). *Nature Communications* 8, 14049.
 
 ## Pipeline
 
-| Step | Script | Description |
-|------|--------|-------------|
-| 01 | `scripts/01_load_and_qc.py` | Download data, calculate QC metrics (genes/cell, counts, mito %), filter |
-| 02 | `scripts/02_preprocess.py` | Normalise (10k/cell), log-transform, select 2,000 HVGs, regress covariates, scale |
-| 03 | `scripts/03_reduce_dimensions.py` | PCA (40 components), neighbour graph, UMAP embedding |
-| 04 | `scripts/04_cluster.py` | Leiden clustering at 5 resolutions, silhouette-based selection (min 5 clusters) |
-| 05 | `scripts/05_annotate_cell_types.py` | Wilcoxon DE, marker gene scoring, automated cell type assignment |
-| 06 | `scripts/06_publication_figures.py` | Multi-panel publication figure (UMAP, composition, heatmap) |
+| Step | Script | What it does |
+|------|--------|--------------|
+| 01 | `01_load_and_qc.py` | Download PBMC 3k, calculate QC metrics (genes/cell, UMI counts, mitochondrial %), filter low-quality cells |
+| 02 | `02_preprocess.py` | Normalise to 10k counts/cell, log-transform, select 2,000 highly variable genes, regress out confounders, scale |
+| 03 | `03_reduce_dimensions.py` | PCA (40 components), build k-nearest neighbour graph, compute UMAP embedding |
+| 04 | `04_cluster.py` | Leiden clustering at 5 resolutions (0.3–1.2), evaluate with silhouette score, select best with a floor of 5 clusters |
+| 05 | `05_annotate_cell_types.py` | Wilcoxon rank-sum test for marker genes, score clusters against known PBMC signatures, assign cell types |
+| 06 | `06_publication_figures.py` | Multi-panel figure: UMAP, composition bar chart, marker heatmap, summary statistics |
+
+All scripts are in `scripts/`. Each reads the previous step's `.h5ad` output from `results/`.
 
 ## Results
 
-| Cell Type | Count | Proportion |
-|-----------|-------|------------|
-| CD4+ T cells | 1,195 | 45.3% |
-| CD14+ Monocytes | 464 | 17.6% |
-| NK cells | 419 | 15.9% |
-| B cells | 342 | 13.0% |
-| FCGR3A+ Monocytes | 180 | 6.8% |
-| Dendritic cells | 38 | 1.4% |
+| Cell Type | Cells | % | Key Markers |
+|-----------|-------|---|-------------|
+| CD4+ T cells | 1,195 | 45.3 | CD3D, IL7R |
+| CD14+ Monocytes | 464 | 17.6 | CD14, LYZ |
+| NK cells | 419 | 15.9 | NKG7, GNLY |
+| B cells | 342 | 13.0 | MS4A1, CD79A |
+| FCGR3A+ Monocytes | 180 | 6.8 | FCGR3A, MS4A7 |
+| Dendritic cells | 38 | 1.4 | FCER1A, CST3 |
 
-Best clustering: Leiden resolution 0.5, 6 clusters, silhouette score 0.196.
+These proportions are consistent with expected PBMC composition from a healthy donor. Clustering selected resolution 0.5 (6 clusters, silhouette 0.196).
 
 ## Quick Start
 
 ```bash
-# Clone
 git clone https://github.com/Ekin-Kahraman/single-cell-rnaseq-immune-profiling.git
 cd single-cell-rnaseq-immune-profiling
-
-# Install
 pip install -e .
-
-# Run full pipeline (~17 seconds)
-python run_pipeline.py
-
-# Resume from a specific step
-python run_pipeline.py --from 4
+python run_pipeline.py            # full pipeline (~17s)
+python run_pipeline.py --from 4   # resume from step 4
 ```
-
-## Requirements
-
-- Python >= 3.10
-- scanpy >= 1.10
-- leidenalg >= 0.10
-- scikit-learn >= 1.3
-
-Full dependency list in `pyproject.toml`.
 
 ## Testing
 
@@ -76,25 +64,14 @@ pip install -e ".[dev]"
 pytest -v
 ```
 
-## Project Structure
+7 tests covering QC filtering, normalisation, HVG selection, clustering, and marker gene validation. CI runs on Python 3.10, 3.11, and 3.12.
 
-```
-.
-├── scripts/           # Analysis pipeline (01-06)
-├── tests/             # pytest test suite
-├── data/              # Raw data (auto-downloaded)
-├── results/           # Output: h5ad files, figures, CSVs
-├── run_pipeline.py    # Pipeline orchestrator
-├── pyproject.toml     # Dependencies and project config
-└── CITATION.cff       # Citation metadata
-```
+## Design Decisions
 
-## Key Design Decisions
-
-- **Automated cell type annotation**: Clusters are assigned to cell types by scoring against curated PBMC marker gene sets, not manual inspection.
-- **Multi-resolution clustering**: Leiden is run at 5 resolutions (0.3-1.2) and the best is selected by silhouette score with a biological floor of 5 clusters.
-- **Colourblind-friendly palette**: Publication figures use the Okabe-Ito palette for accessibility.
-- **Modular scripts**: Each step reads the previous step's output from disk. Steps can be re-run independently.
+- **Automated annotation** — Clusters are scored against curated PBMC marker gene sets rather than annotated by manual inspection. This makes the pipeline reproducible and removes subjective judgement.
+- **Multi-resolution clustering** — Running Leiden at multiple resolutions and picking by silhouette score (with a biological floor) avoids the common problem of choosing an arbitrary resolution.
+- **Colourblind-friendly palette** — Okabe-Ito colours throughout.
+- **Modular scripts** — Each step is independent. Re-run any step without repeating upstream work.
 
 ## Licence
 
