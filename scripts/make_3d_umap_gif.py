@@ -2,7 +2,6 @@
 
 import scanpy as sc
 import matplotlib.pyplot as plt
-import numpy as np
 import imageio.v3 as iio
 from pathlib import Path
 from io import BytesIO
