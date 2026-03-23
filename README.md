@@ -1,6 +1,6 @@
 # Single-Cell RNA-seq Immune Cell Profiling
 
-End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Demonstrates quality control, normalization, dimensionality reduction, clustering with automated resolution selection, and marker-based cell type annotation on human PBMC data.
+End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Demonstrates quality control, normalisation, dimensionality reduction, clustering with automated resolution selection, and marker-based cell type annotation on human PBMC data.
 
 <p align="center">
   <img src="docs/umap_3d_rotation.gif" alt="3D UMAP rotation showing PBMC immune cell clusters" width="600">
@@ -24,8 +24,8 @@ End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https:
 | Step | Script | Description |
 |------|--------|-------------|
 | 01 | `scripts/01_load_and_qc.py` | Download data, calculate QC metrics (genes/cell, counts, mito %), filter |
-| 02 | `scripts/02_preprocess.py` | Normalize (10k/cell), log-transform, select 2,000 HVGs, regress covariates, scale |
-| 03 | `scripts/03_reduce_dimensions.py` | PCA (40 components), neighbor graph, UMAP embedding |
+| 02 | `scripts/02_preprocess.py` | Normalise (10k/cell), log-transform, select 2,000 HVGs, regress covariates, scale |
+| 03 | `scripts/03_reduce_dimensions.py` | PCA (40 components), neighbour graph, UMAP embedding |
 | 04 | `scripts/04_cluster.py` | Leiden clustering at 5 resolutions, silhouette-based selection (min 5 clusters) |
 | 05 | `scripts/05_annotate_cell_types.py` | Wilcoxon DE, marker gene scoring, automated cell type assignment |
 | 06 | `scripts/06_publication_figures.py` | Multi-panel publication figure (UMAP, composition, heatmap) |
@@ -93,9 +93,9 @@ pytest -v
 
 - **Automated cell type annotation**: Clusters are assigned to cell types by scoring against curated PBMC marker gene sets, not manual inspection.
 - **Multi-resolution clustering**: Leiden is run at 5 resolutions (0.3-1.2) and the best is selected by silhouette score with a biological floor of 5 clusters.
-- **Colorblind-friendly palette**: Publication figures use the Okabe-Ito palette for accessibility.
+- **Colourblind-friendly palette**: Publication figures use the Okabe-Ito palette for accessibility.
 - **Modular scripts**: Each step reads the previous step's output from disk. Steps can be re-run independently.
 
-## License
+## Licence
 
 MIT

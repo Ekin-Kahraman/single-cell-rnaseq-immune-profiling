@@ -9,7 +9,7 @@ from pathlib import Path
 RESULTS_DIR = Path("results")
 FIG_DIR = RESULTS_DIR / "figures"
 
-# Color palette (colorblind-friendly)
+# Colour palette (colourblind-friendly)
 PALETTE = {
     "CD4+ T cells": "#E69F00",
     "CD8+ T cells": "#56B4E9",
@@ -82,7 +82,7 @@ def make_figure(adata):
         raw_df["cell_type"] = adata.obs["cell_type"].values
         mean_expr = raw_df.groupby("cell_type")[markers_present].mean()
 
-        # Z-score per gene for visualization
+        # Z-score per gene for visualisation
         from scipy.stats import zscore
         z_expr = mean_expr.apply(zscore, axis=0)
 

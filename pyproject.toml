@@ -9,8 +9,11 @@ description = "Single-cell RNA-seq immune cell profiling pipeline using scanpy"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
-authors = [{name = "Ekin Kahraman"}]
+authors = [{name = "Ekin Kahraman", email = "evk23umu@uea.ac.uk"}]
 keywords = ["bioinformatics", "single-cell", "RNA-seq", "scanpy", "immune profiling"]
+
+[project.urls]
+Repository = "https://github.com/Ekin-Kahraman/single-cell-rnaseq-immune-profiling"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",

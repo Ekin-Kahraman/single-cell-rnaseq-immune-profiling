@@ -1,4 +1,4 @@
-"""Step 02: Normalize, find highly variable genes, and scale."""
+"""Step 02: Normalise, find highly variable genes, and scale."""
 
 import scanpy as sc
 import matplotlib.pyplot as plt
@@ -13,10 +13,10 @@ FIG_DIR = RESULTS_DIR / "figures"
 
 
 def preprocess(adata):
-    """Normalize, log-transform, select HVGs, regress, and scale."""
+    """Normalise, log-transform, select HVGs, regress, and scale."""
     print(f"Input: {adata.n_obs} cells, {adata.n_vars} genes")
 
-    # Normalize to target_sum counts per cell
+    # Normalise to target_sum counts per cell
     sc.pp.normalize_total(adata, target_sum=TARGET_SUM)
     print(f"Normalized to {TARGET_SUM:.0f} counts per cell")
 
