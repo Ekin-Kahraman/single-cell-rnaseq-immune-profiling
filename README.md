@@ -2,7 +2,7 @@
 
 End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Demonstrates quality control, normalization, dimensionality reduction, clustering with automated resolution selection, and marker-based cell type annotation on human PBMC data.
 
-![Publication Figure](results/figures/06_publication_figure.png)
+![Publication Figure](docs/publication_figure.png)
 
 ## Dataset
 
