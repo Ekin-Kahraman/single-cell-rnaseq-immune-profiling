@@ -2,7 +2,15 @@
 
 End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Demonstrates quality control, normalization, dimensionality reduction, clustering with automated resolution selection, and marker-based cell type annotation on human PBMC data.
 
+<p align="center">
+  <img src="docs/umap_3d_rotation.gif" alt="3D UMAP rotation showing PBMC immune cell clusters" width="600">
+</p>
+
+<details>
+<summary>Publication figure (static)</summary>
+
 ![Publication Figure](docs/publication_figure.png)
+</details>
 
 ## Dataset
 
