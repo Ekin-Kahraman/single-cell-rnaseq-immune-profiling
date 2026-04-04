@@ -2,6 +2,7 @@
 
 import scanpy as sc
 import matplotlib.pyplot as plt
+import numpy as np
 import imageio.v3 as iio
 from pathlib import Path
 from io import BytesIO
@@ -10,57 +11,64 @@ from palette import PALETTE
 RESULTS_DIR = Path("results")
 DOCS_DIR = Path("docs")
 
-
 N_FRAMES = 120
 FPS = 24
 
 
 def compute_3d_umap(adata):
-    """Compute 3D UMAP embedding."""
-    sc.tl.umap(adata, n_components=3)
+    """Compute 3D UMAP embedding with fixed seed."""
+    sc.tl.umap(adata, n_components=3, random_state=42)
     return adata.obsm["X_umap"]
 
 
-def render_frame(coords, cell_types, azim, elev=25):
-    """Render a single frame of the 3D UMAP at a given azimuth angle."""
-    fig = plt.figure(figsize=(8, 6), facecolor="white")
-    ax = fig.add_subplot(111, projection="3d", facecolor="white")
+def render_frame(coords, cell_types, azim, elev):
+    """Render a single frame of the 3D UMAP."""
+    fig = plt.figure(figsize=(7, 7), facecolor="#0D1117")
+    ax = fig.add_subplot(111, projection="3d", facecolor="#0D1117")
 
-    for ct in cell_types.cat.categories:
+    # Sort cell types so smaller populations render on top
+    type_order = cell_types.value_counts().index[::-1]
+
+    for ct in type_order:
         mask = cell_types == ct
+        colour = PALETTE.get(ct, "#AAAAAA")
         ax.scatter(
             coords[mask, 0], coords[mask, 1], coords[mask, 2],
-            c=PALETTE.get(ct, "#AAAAAA"),
-            s=6, alpha=0.8, label=ct, edgecolors="none",
+            c=colour, s=10, alpha=0.85, label=ct,
+            edgecolors="none", rasterized=True, depthshade=True,
         )
 
     ax.view_init(elev=elev, azim=azim)
+
+    # Clean axes — no ticks, no panes, no grid
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_zticks([])
     ax.xaxis.pane.fill = False
     ax.yaxis.pane.fill = False
     ax.zaxis.pane.fill = False
-    ax.xaxis.pane.set_edgecolor("#EEEEEE")
-    ax.yaxis.pane.set_edgecolor("#EEEEEE")
-    ax.zaxis.pane.set_edgecolor("#EEEEEE")
-    ax.xaxis.line.set_color("#CCCCCC")
-    ax.yaxis.line.set_color("#CCCCCC")
-    ax.zaxis.line.set_color("#CCCCCC")
-    ax.grid(True, alpha=0.15)
+    ax.xaxis.pane.set_edgecolor("#0D1117")
+    ax.yaxis.pane.set_edgecolor("#0D1117")
+    ax.zaxis.pane.set_edgecolor("#0D1117")
+    ax.xaxis.line.set_color("#0D1117")
+    ax.yaxis.line.set_color("#0D1117")
+    ax.zaxis.line.set_color("#0D1117")
+    ax.grid(False)
 
-    ax.legend(
-        loc="upper left", fontsize=7, framealpha=0.7,
-        facecolor="white", edgecolor="#DDDDDD",
-        markerscale=3,
+    # Legend — bottom right, out of the way
+    legend = ax.legend(
+        loc="lower right", fontsize=8, framealpha=0.85,
+        facecolor="#161B22", edgecolor="#30363D",
+        labelcolor="white", markerscale=3,
     )
+    legend.get_frame().set_linewidth(0.5)
 
-    ax.set_title("3D UMAP — PBMC Immune Cell Profiling", color="#222222",
-                 fontsize=14, fontweight="bold", pad=10)
+    ax.set_title("PBMC Immune Cell Profiling — 3D UMAP",
+                 color="white", fontsize=13, fontweight="bold", pad=15)
 
     buf = BytesIO()
-    fig.savefig(buf, format="png", dpi=100, bbox_inches="tight",
-                facecolor="white", edgecolor="none")
+    fig.savefig(buf, format="png", dpi=120, bbox_inches="tight",
+                facecolor="#0D1117", edgecolor="none", pad_inches=0.3)
     plt.close(fig)
     buf.seek(0)
     return iio.imread(buf)
@@ -71,7 +79,6 @@ def main():
     adata = sc.read_h5ad(in_path)
     print(f"Loaded {in_path}")
 
-    # Need to recompute neighbor graph since preprocessed data is subset
     if "neighbors" not in adata.uns:
         sc.pp.neighbors(adata, n_neighbors=15, n_pcs=40)
 
@@ -83,9 +90,11 @@ def main():
     frames = []
     for i in range(N_FRAMES):
         azim = (i / N_FRAMES) * 360
-        frame = render_frame(coords, cell_types, azim)
+        # Gentle elevation oscillation: 20° to 35° and back
+        elev = 27.5 + 7.5 * np.sin(2 * np.pi * i / N_FRAMES)
+        frame = render_frame(coords, cell_types, azim, elev)
         frames.append(frame)
-        if (i + 1) % 30 == 0:
+        if (i + 1) % 45 == 0:
             print(f"  {i + 1}/{N_FRAMES} frames")
 
     DOCS_DIR.mkdir(exist_ok=True)
