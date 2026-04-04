@@ -20,8 +20,12 @@ STEPS = [
     ("03 Reduce dimensions", "03_reduce_dimensions.py"),
     ("04 Cluster", "04_cluster.py"),
     ("05 Annotate cell types", "05_annotate_cell_types.py"),
-    ("06 Publication figures", "06_publication_figures.py"),
+    ("06 Trajectory inference", "06_trajectory.py"),
+    ("07 T cell subclustering", "07_t_cell_subclustering.py"),
+    ("08 Publication figures", "08_publication_figures.py"),
 ]
+
+N_STEPS = len(STEPS)
 
 
 def run_pipeline(start_from=1):
@@ -32,10 +36,10 @@ def run_pipeline(start_from=1):
     total_start = time.time()
     for i, (name, script) in enumerate(STEPS, 1):
         if i < start_from:
-            print(f"\n[{i}/6] {name} -- SKIPPED")
+            print(f"\n[{i}/{N_STEPS}] {name} -- SKIPPED")
             continue
         print(f"\n{'─' * 60}")
-        print(f"[{i}/6] {name}")
+        print(f"[{i}/{N_STEPS}] {name}")
         print("─" * 60)
         step_start = time.time()
         result = subprocess.run(
@@ -57,7 +61,7 @@ def run_pipeline(start_from=1):
 def main():
     parser = argparse.ArgumentParser(description="Run single-cell RNA-seq pipeline")
     parser.add_argument("--from", dest="start_from", type=int, default=1,
-                        help="Step number to start from (1-6)")
+                        help=f"Step number to start from (1-{N_STEPS})")
     args = parser.parse_args()
     run_pipeline(start_from=args.start_from)
 

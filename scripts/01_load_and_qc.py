@@ -84,13 +84,22 @@ def run_qc(adata):
     plt.close(fig)
     print(f"Saved QC plot to {FIG_DIR / '01_qc_metrics.png'}")
 
+    # --- Doublet detection ---
+    sc.pp.scrublet(adata, random_state=42)
+    n_doublets = adata.obs["predicted_doublet"].sum()
+    print(f"Scrublet detected {n_doublets} predicted doublets ({n_doublets/adata.n_obs*100:.1f}%)")
+
     # --- Filtering ---
     n_before = adata.n_obs
     sc.pp.filter_cells(adata, min_genes=MIN_GENES_PER_CELL)
     sc.pp.filter_genes(adata, min_cells=MIN_CELLS_PER_GENE)
     adata = adata[adata.obs["n_genes_by_counts"] < MAX_GENES_PER_CELL, :].copy()
     adata = adata[adata.obs["pct_counts_mt"] < MAX_PCT_MITO, :].copy()
+    # Remove predicted doublets
+    n_doublets_remaining = adata.obs["predicted_doublet"].sum()
+    adata = adata[~adata.obs["predicted_doublet"], :].copy()
     n_after = adata.n_obs
+    print(f"Removed {n_doublets_remaining} doublets from filtered cells")
 
     print(f"Filtered: {n_before} -> {n_after} cells ({n_before - n_after} removed)")
     print(f"Genes remaining: {adata.n_vars}")

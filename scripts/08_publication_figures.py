@@ -1,4 +1,4 @@
-"""Step 06: Generate publication-quality multi-panel figures."""
+"""Step 08: Generate publication-quality multi-panel figures."""
 
 import scanpy as sc
 import matplotlib.pyplot as plt
@@ -124,7 +124,7 @@ def make_figure(adata):
 
 
 def main():
-    in_path = RESULTS_DIR / "05_annotated.h5ad"
+    in_path = RESULTS_DIR / "06_trajectory.h5ad"
     adata = sc.read_h5ad(in_path)
     print(f"Loaded {in_path}")
 
