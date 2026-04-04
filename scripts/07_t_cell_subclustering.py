@@ -27,7 +27,8 @@ def subcluster_t_cells(adata):
     # Recompute neighbours and UMAP on T cell subset
     sc.pp.neighbors(adata_t, n_neighbors=15, n_pcs=20)
     sc.tl.umap(adata_t, random_state=42)
-    sc.tl.leiden(adata_t, resolution=0.5, key_added="t_subcluster", random_state=42)
+    sc.tl.leiden(adata_t, resolution=0.5, key_added="t_subcluster",
+                 flavor="igraph", n_iterations=2, directed=False, random_state=42)
 
     # Score for CD4 vs CD8
     available = set(adata_t.raw.var_names) if adata_t.raw else set(adata_t.var_names)
@@ -85,7 +86,7 @@ def plot_subclustering(adata_t):
                                 use_raw=True, return_fig=True)
         fig_dot.savefig(FIG_DIR / "07_t_cell_markers.png", dpi=150, bbox_inches="tight")
         plt.close("all")
-        print(f"Saved T cell marker dotplot")
+        print("Saved T cell marker dotplot")
 
 
 def main():
