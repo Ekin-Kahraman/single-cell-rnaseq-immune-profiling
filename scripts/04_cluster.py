@@ -19,7 +19,8 @@ def cluster_multi_resolution(adata):
     for res in RESOLUTIONS:
         key = f"leiden_{res}"
         sc.tl.leiden(adata, resolution=res, key_added=key,
-                     flavor="igraph", n_iterations=2, directed=False)
+                     flavor="igraph", n_iterations=2, directed=False,
+                     random_state=42)
         n_clusters = adata.obs[key].nunique()
 
         if n_clusters > 1:

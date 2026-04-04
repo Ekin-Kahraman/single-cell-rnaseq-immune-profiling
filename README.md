@@ -25,6 +25,30 @@ End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https:
 - **Direct download**: [filtered gene-barcode matrices](https://cf.10xgenomics.com/samples/cell-exp/1.1.0/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) (5.9 MB)
 - **Reference**: Zheng et al. (2017) [Massively parallel digital transcriptional profiling of single cells](https://doi.org/10.1038/ncomms14049). *Nature Communications* 8, 14049.
 
+## Workflow
+
+```
+PBMC 3k (10X Genomics)
+    │
+    ▼
+ 01 QC ──────────── Filter: 200 < genes < 2500, mito < 5%
+    │
+    ▼
+ 02 Preprocess ──── Normalise (10k), log1p, 2000 HVGs, regress, scale
+    │
+    ▼
+ 03 Reduce ──────── PCA (40 PCs) → kNN graph → UMAP
+    │
+    ▼
+ 04 Cluster ─────── Leiden at 5 resolutions → silhouette selection (≥5 clusters)
+    │
+    ▼
+ 05 Annotate ────── Wilcoxon DE → score against PBMC marker signatures
+    │
+    ▼
+ 06 Figures ─────── Multi-panel publication figure + 3D UMAP
+```
+
 ## Pipeline
 
 | Step | Script | What it does |
@@ -49,7 +73,9 @@ All scripts are in `scripts/`. Each reads the previous step's `.h5ad` output fro
 | FCGR3A+ Monocytes | 180 | 6.8 | FCGR3A, MS4A7 |
 | Dendritic cells | 38 | 1.4 | FCER1A, CST3 |
 
-These proportions are consistent with expected PBMC composition from a healthy donor. Clustering selected resolution 0.5 (6 clusters, silhouette 0.196).
+The dominance of CD4+ T cells (45%) is expected in healthy donor PBMCs. The ratio of classical (CD14+) to nonclassical (FCGR3A+) monocytes is approximately 2.6:1, consistent with published literature. Dendritic cells are a rare population (1.4%), correctly resolved as a distinct cluster. CD8+ T cells and megakaryocytes are present in the dataset but were not resolved as separate clusters at resolution 0.5 — they likely merge with the CD4+ T cell and monocyte clusters respectively due to shared marker expression (CD3D/CD3E for T cell subtypes).
+
+Clustering selected resolution 0.5 (6 clusters, silhouette 0.196). Silhouette scores in single-cell data are typically low due to continuous rather than discrete cell states; the metric is used here for relative comparison between resolutions, not as an absolute quality measure.
 
 ## Quick Start
 
@@ -76,6 +102,13 @@ pytest -v
 - **Multi-resolution clustering** — Running Leiden at multiple resolutions and picking by silhouette score (with a biological floor) avoids the common problem of choosing an arbitrary resolution.
 - **Colourblind-friendly palette** — Okabe-Ito colours throughout.
 - **Modular scripts** — Each step is independent. Re-run any step without repeating upstream work.
+
+## Limitations and Future Work
+
+- **No doublet detection.** Scrublet or similar should precede QC in a production pipeline. Omitted here because PBMC 3k is a clean benchmark with negligible doublet rates.
+- **No batch correction.** Single-sample dataset. Multi-sample analyses would require Harmony, scVI, or BBKNN.
+- **`regress_out` is debatable.** Used here following the original scanpy tutorial, but Luecken & Theis (2019) suggest regression may overcorrect for well-filtered cells. Included for pedagogical alignment with the standard workflow.
+- **CD8+ T cells not resolved.** Would require higher clustering resolution or subclustering of the T cell compartment.
 
 ## Licence
 

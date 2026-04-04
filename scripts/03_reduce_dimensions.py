@@ -50,8 +50,8 @@ def reduce_dimensions(adata):
     sc.pp.neighbors(adata, n_neighbors=N_NEIGHBORS, n_pcs=N_PCS)
     print(f"Built neighbor graph (n_neighbors={N_NEIGHBORS}, n_pcs={N_PCS})")
 
-    # UMAP embedding
-    sc.tl.umap(adata)
+    # UMAP embedding (seed for reproducibility)
+    sc.tl.umap(adata, random_state=42)
     print("Computed UMAP embedding")
 
     # Store n_pcs used for downstream reference
