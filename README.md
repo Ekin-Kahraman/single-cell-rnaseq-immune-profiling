@@ -1,5 +1,9 @@
 # Single-Cell RNA-seq Immune Cell Profiling
 
+[![CI](https://github.com/Ekin-Kahraman/single-cell-rnaseq-immune-profiling/actions/workflows/ci.yml/badge.svg)](https://github.com/Ekin-Kahraman/single-cell-rnaseq-immune-profiling/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+
 End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Quality control, normalisation, dimensionality reduction, unsupervised clustering with automated resolution selection, and marker-based cell type annotation on human peripheral blood mononuclear cells.
 
 <p align="center">
