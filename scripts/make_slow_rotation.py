@@ -5,19 +5,10 @@ import matplotlib.pyplot as plt
 import imageio.v3 as iio
 from pathlib import Path
 from io import BytesIO
+from palette import PALETTE
 
 RESULTS_DIR = Path("results")
 
-PALETTE = {
-    "CD4+ T cells": "#E69F00",
-    "CD8+ T cells": "#56B4E9",
-    "NK cells": "#009E73",
-    "B cells": "#F0E442",
-    "CD14+ Monocytes": "#0072B2",
-    "FCGR3A+ Monocytes": "#D55E00",
-    "Dendritic cells": "#CC79A7",
-    "Megakaryocytes": "#999999",
-}
 
 BG = "#0d1117"
 N_FRAMES = 120
