@@ -110,10 +110,12 @@ Silhouette scores in single-cell data are typically low due to continuous rather
 ```bash
 git clone https://github.com/Ekin-Kahraman/single-cell-rnaseq-immune-profiling.git
 cd single-cell-rnaseq-immune-profiling
-pip install -e .
+pip install -e .                  # or: pip install -r requirements-lock.txt
 python run_pipeline.py            # full pipeline (~38s)
 python run_pipeline.py --from 6   # resume from trajectory step
 ```
+
+For exact reproducibility, use `requirements-lock.txt` which pins all dependency versions.
 
 ## Testing
 
