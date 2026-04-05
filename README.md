@@ -68,7 +68,32 @@ PBMC 3k (10X Genomics, 2,700 cells)
 | 07 | `07_t_cell_subclustering.py` | Extract T cell compartment, subcluster, resolve CD4+/CD8+ via marker scoring |
 | 08 | `08_publication_figures.py` | Multi-panel figure with UMAP, composition, marker heatmap, summary (PNG + PDF) |
 
-All scripts are in `scripts/`. Each reads the previous step's `.h5ad` output from `results/`.
+## Project Structure
+
+```
+single-cell-rnaseq-immune-profiling/
+├── scripts/
+│   ├── 01_load_and_qc.py          QC + Scrublet doublet detection
+│   ├── 02_preprocess.py            Normalise, HVG, regress, scale
+│   ├── 03_reduce_dimensions.py     PCA, kNN graph, UMAP
+│   ├── 04_cluster.py               Multi-resolution Leiden + silhouette
+│   ├── 05_annotate_cell_types.py   Marker DE + automated annotation
+│   ├── 06_trajectory.py            PAGA + diffusion pseudotime
+│   ├── 07_t_cell_subclustering.py  CD4+/CD8+ resolution
+│   ├── 08_publication_figures.py   Multi-panel figure (PNG + PDF)
+│   └── palette.py                  Shared Okabe-Ito colourblind palette
+├── tests/
+│   └── test_pipeline.py            7 tests (QC, normalisation, clustering, markers)
+├── docs/
+│   ├── umap_3d_rotation.gif        Animated 3D UMAP
+│   └── publication_figure.png      Static multi-panel figure
+├── run_pipeline.py                 CLI runner with --from resume flag
+├── pyproject.toml                  Dependencies + metadata
+├── requirements-lock.txt           Pinned versions for reproducibility
+└── CITATION.cff
+```
+
+Each script reads the previous step's `.h5ad` output from `results/`.
 
 ## Results
 
