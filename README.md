@@ -168,6 +168,7 @@ pytest -v
 - **`regress_out` is debatable.** Used here following the original scanpy tutorial, but Luecken & Theis (2019) suggest regression may overcorrect for well-filtered cells.
 - **No pathway enrichment.** Gene set enrichment (via decoupler or GSEApy) would connect cell types to functional programmes. Planned as a future addition.
 - **FCGR3A+ monocytes not resolved.** At resolution 0.5, nonclassical monocytes merge with the CD14+ cluster. Higher resolution or targeted subclustering would separate them.
+- **Megakaryocytes not resolved.** The PBMC 3k dataset contains a small platelet/megakaryocyte population (PPBP+, PF4+) that merges with other clusters at this resolution. The canonical scanpy tutorial resolves 8 cell types from this dataset; our pipeline resolves 5 at the global level + 2 via T cell subclustering. The difference is resolution choice — we optimise for silhouette score rather than maximising cluster count.
 
 ## Licence
 
