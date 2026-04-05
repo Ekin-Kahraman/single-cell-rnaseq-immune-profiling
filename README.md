@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
 
-End-to-end single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Doublet detection, quality control, normalisation, dimensionality reduction, clustering with automated resolution selection, marker-based cell type annotation, PAGA trajectory inference, and T cell subclustering on human peripheral blood mononuclear cells.
+Single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Doublet detection, quality control, normalisation, dimensionality reduction, clustering with automated resolution selection, marker-based cell type annotation, PAGA trajectory inference, and T cell subclustering on human peripheral blood mononuclear cells.
 
 <p align="center">
   <img src="docs/umap_3d_rotation.gif" alt="3D UMAP rotation showing PBMC immune cell clusters" width="600">
