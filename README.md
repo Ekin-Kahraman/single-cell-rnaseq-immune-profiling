@@ -153,10 +153,10 @@ pytest -v
 
 ## Design Decisions
 
-- **Doublet detection** — Scrublet integrated before QC filtering. 36 doublets detected (1.3%), 34 removed after other QC filters. Following [Luecken & Theis (2019)](https://doi.org/10.15252/msb.20188746) best practices.
-- **Automated annotation** — Clusters scored against curated PBMC marker gene sets rather than manual inspection. Reproducible and removes subjective judgement.
-- **Multi-resolution clustering** — Leiden at 5 resolutions with silhouette evaluation and a biological floor of ≥5 clusters.
-- **Trajectory inference** — PAGA provides a principled graph abstraction of cell-type connectivity. Diffusion pseudotime orders cells along differentiation axes.
+- **Doublet detection** — Scrublet integrated before QC filtering. 36 doublets detected (1.3%), 34 removed after other QC filters. Recommended by [Luecken & Theis (2019)](https://doi.org/10.15252/msb.20188746).
+- **Automated annotation** — Clusters scored against curated PBMC marker gene sets rather than manual inspection. The marker sets are themselves a subjective choice — but encoding them explicitly makes the annotation reproducible and auditable.
+- **Multi-resolution clustering** — Leiden at 5 resolutions with silhouette evaluation. The ≥5 cluster floor reflects the known minimum of major PBMC lineages (T cells, B cells, monocytes, NK, DCs).
+- **Trajectory inference** — PAGA provides a principled graph abstraction of cell-type connectivity. Diffusion pseudotime rooted in CD14+ monocytes because they are the most primitive myeloid progenitor in PBMCs — the expected starting point of the monocyte-to-DC differentiation axis.
 - **T cell subclustering** — Resolves CD4+/CD8+ populations that share CD3D/CD3E expression and cannot be separated at global clustering resolution.
 - **Colourblind-friendly palette** — Okabe-Ito colours throughout.
 - **Reproducible seeds** — `random_state=42` for UMAP, Leiden, Scrublet, and silhouette sampling.
