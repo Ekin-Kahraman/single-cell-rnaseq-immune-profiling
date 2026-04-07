@@ -106,11 +106,11 @@ def make_figure(adata):
         ax_e.text(0.1, y, label, fontsize=11, fontweight="bold", transform=ax_e.transAxes)
         ax_e.text(0.6, y, value, fontsize=11, transform=ax_e.transAxes)
 
-    fig.savefig(FIG_DIR / "06_publication_figure.png", dpi=300, bbox_inches="tight")
-    fig.savefig(FIG_DIR / "06_publication_figure.pdf", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "08_publication_figure.png", dpi=300, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "08_publication_figure.pdf", bbox_inches="tight")
     plt.close(fig)
-    print(f"Saved publication figure to {FIG_DIR / '06_publication_figure.png'}")
-    print(f"Saved publication figure to {FIG_DIR / '06_publication_figure.pdf'}")
+    print(f"Saved publication figure to {FIG_DIR / '08_publication_figure.png'}")
+    print(f"Saved publication figure to {FIG_DIR / '08_publication_figure.pdf'}")
 
 
 def main():
