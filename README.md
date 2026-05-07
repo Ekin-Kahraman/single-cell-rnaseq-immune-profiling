@@ -6,6 +6,8 @@
 
 Single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.readthedocs.io/). Doublet detection, quality control, normalisation, dimensionality reduction, clustering with automated resolution selection, marker-based cell type annotation, PAGA trajectory inference, and T cell subclustering on human peripheral blood mononuclear cells.
 
+Retains 2,604 PBMCs, resolves 5 major immune populations plus CD4/CD8 T-cell subclusters, with CI-tested reproducibility.
+
 <p align="center">
   <img src="docs/umap_3d_rotation.gif" alt="3D UMAP rotation showing PBMC immune cell clusters" width="600">
 </p>
