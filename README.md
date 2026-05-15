@@ -8,6 +8,13 @@ Single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.re
 
 Retains 2,604 PBMCs, resolves 5 major immune populations plus CD4/CD8 T-cell subclusters, with CI-tested reproducibility.
 
+## Production Readiness
+
+- CI runs unit tests across Python 3.10, 3.11, and 3.12.
+- CI also runs the complete PBMC pipeline on Python 3.12 and validates generated `.h5ad`, CSV, PNG, PDF, and manifest artefacts.
+- `results/output_manifest.csv` is generated on each full run with file sizes and SHA-256 checksums for pipeline outputs.
+- `scripts/validate_outputs.py` checks retained cell counts, required annotations, T-cell subtyping, marker tables, figures, and manifest integrity.
+
 <p align="center">
   <img src="docs/umap_3d_rotation.gif" alt="3D UMAP rotation showing PBMC immune cell clusters" width="600">
 </p>
@@ -55,6 +62,9 @@ PBMC 3k (10X Genomics, 2,700 cells)
     │
     ▼
  08 Figures ─────── Multi-panel publication figure (PNG 300 DPI + PDF vector)
+    │
+    ▼
+ 09 Manifest ─────── SHA-256 manifest for generated analysis artefacts
 ```
 
 ## Pipeline
@@ -69,6 +79,7 @@ PBMC 3k (10X Genomics, 2,700 cells)
 | 06 | `06_trajectory.py` | PAGA partition-based graph abstraction, PAGA-initialised UMAP, diffusion pseudotime |
 | 07 | `07_t_cell_subclustering.py` | Extract T cell compartment, subcluster, resolve CD4+/CD8+ via marker scoring |
 | 08 | `08_publication_figures.py` | Multi-panel figure with UMAP, composition, marker heatmap, summary (PNG + PDF) |
+| 09 | `09_output_manifest.py` | Generate checksums and file-size manifest for analysis artefacts |
 
 ## Project Structure
 
@@ -83,6 +94,8 @@ single-cell-rnaseq-immune-profiling/
 │   ├── 06_trajectory.py            PAGA + diffusion pseudotime
 │   ├── 07_t_cell_subclustering.py  CD4+/CD8+ resolution
 │   ├── 08_publication_figures.py   Multi-panel figure (PNG + PDF)
+│   ├── 09_output_manifest.py        Output checksums and file sizes
+│   ├── validate_outputs.py          Full-run output validator
 │   └── palette.py                  Shared Okabe-Ito colourblind palette
 ├── tests/
 │   └── test_pipeline.py            7 tests (QC, normalisation, clustering, markers)
@@ -140,6 +153,7 @@ cd single-cell-rnaseq-immune-profiling
 pip install -e .                  # or: pip install -r requirements-lock.txt
 python run_pipeline.py            # full pipeline (~38s)
 python run_pipeline.py --from 6   # resume from trajectory step
+python scripts/validate_outputs.py
 ```
 
 For exact reproducibility, use `requirements-lock.txt` which pins all dependency versions.
@@ -151,7 +165,7 @@ pip install -e ".[dev]"
 pytest -v
 ```
 
-7 tests covering QC filtering, normalisation, HVG selection, clustering, and marker gene validation. CI runs on Python 3.10, 3.11, and 3.12.
+7 tests covering QC filtering, normalisation, HVG selection, clustering, and marker gene validation. CI runs tests on Python 3.10, 3.11, and 3.12, then runs and validates the full pipeline on Python 3.12.
 
 ## Design Decisions
 

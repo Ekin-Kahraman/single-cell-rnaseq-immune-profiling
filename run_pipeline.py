@@ -23,6 +23,7 @@ STEPS = [
     ("06 Trajectory inference", "06_trajectory.py"),
     ("07 T cell subclustering", "07_t_cell_subclustering.py"),
     ("08 Publication figures", "08_publication_figures.py"),
+    ("09 Output manifest", "09_output_manifest.py"),
 ]
 
 N_STEPS = len(STEPS)
