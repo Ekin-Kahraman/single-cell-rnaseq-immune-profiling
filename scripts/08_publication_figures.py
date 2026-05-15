@@ -23,8 +23,8 @@ def make_figure(adata):
     """Create a multi-panel publication figure."""
     FIG_DIR.mkdir(parents=True, exist_ok=True)
 
-    fig = plt.figure(figsize=(18, 12))
-    gs = gridspec.GridSpec(2, 3, figure=fig, hspace=0.4, wspace=0.45)
+    fig = plt.figure(figsize=(16, 10))
+    gs = gridspec.GridSpec(2, 3, figure=fig, hspace=0.3, wspace=0.35)
 
     # A: UMAP by cluster
     ax_a = fig.add_subplot(gs[0, 0])
@@ -37,7 +37,7 @@ def make_figure(adata):
     present_types = adata.obs["cell_type"].cat.categories.tolist()
     palette = [PALETTE.get(ct, "#AAAAAA") for ct in present_types]
     sc.pl.umap(adata, color="cell_type", palette=palette,
-               legend_loc="on data", legend_fontsize=6, legend_fontoutline=2,
+               legend_loc=None,
                frameon=False, ax=ax_b, show=False, title="")
     ax_b.set_title("B  Cell Types", fontsize=12, fontweight="bold", loc="left")
 
