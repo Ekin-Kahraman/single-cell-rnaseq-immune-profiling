@@ -32,7 +32,7 @@ def make_figure(adata):
                legend_fontoutline=2, frameon=False, ax=ax_a, show=False, title="")
     ax_a.set_title("A  Leiden Clusters", fontsize=12, fontweight="bold", loc="left")
 
-    # B: UMAP by cell type (legend on data to avoid overlap with panel C)
+    # B: UMAP by cell type; panel C carries the matching colour key.
     ax_b = fig.add_subplot(gs[0, 1])
     present_types = adata.obs["cell_type"].cat.categories.tolist()
     palette = [PALETTE.get(ct, "#AAAAAA") for ct in present_types]
