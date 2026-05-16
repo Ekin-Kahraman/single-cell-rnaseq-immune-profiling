@@ -8,7 +8,7 @@ Single-cell RNA-seq analysis pipeline in Python using [scanpy](https://scanpy.re
 
 Retains 2,604 PBMCs, resolves 5 major immune populations plus CD4/CD8 T-cell subclusters, with CI-tested reproducibility.
 
-## Production Readiness
+## Engineering Evidence
 
 - CI runs unit tests across Python 3.10, 3.11, and 3.12.
 - CI also runs the complete PBMC pipeline on Python 3.12 and validates generated `.h5ad`, CSV, PNG, PDF, and manifest artefacts.
@@ -24,12 +24,12 @@ Retains 2,604 PBMCs, resolves 5 major immune populations plus CD4/CD8 T-cell sub
 
 ![Publication Figure](docs/publication_figure.png)
 
-**Panel A** — UMAP coloured by unsupervised Leiden clusters. **Panel B** — Same embedding coloured by assigned cell type. **Panel C** — Cell type proportions. **Panel D** — Z-scored expression of canonical marker genes per cell type (red = high, blue = low). **Panel E** — Summary statistics.
+**Panel A** - UMAP coloured by unsupervised Leiden clusters. **Panel B** - Same embedding coloured by assigned cell type. **Panel C** - Cell type proportions. **Panel D** - Z-scored expression of canonical marker genes per cell type (red = high, blue = low). **Panel E** - Summary statistics.
 </details>
 
 ## Dataset
 
-**10X Genomics PBMC 3k** — 2,700 peripheral blood mononuclear cells from a healthy donor, sequenced on the Chromium platform. This is the standard benchmark dataset used across [scanpy](https://scanpy-tutorials.readthedocs.io/en/latest/pbmc3k.html), [Seurat](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html), and other single-cell frameworks.
+**10X Genomics PBMC 3k** - 2,700 peripheral blood mononuclear cells from a healthy donor, sequenced on the Chromium platform. This is the standard benchmark dataset used across [scanpy](https://scanpy-tutorials.readthedocs.io/en/latest/pbmc3k.html), [Seurat](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html), and other single-cell frameworks.
 
 - **Direct download**: [filtered gene-barcode matrices](https://cf.10xgenomics.com/samples/cell-exp/1.1.0/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) (5.9 MB)
 - **Reference**: Zheng et al. (2017) [Massively parallel digital transcriptional profiling of single cells](https://doi.org/10.1038/ncomms14049). *Nature Communications* 8, 14049.
@@ -141,7 +141,7 @@ PAGA connects CD14+ monocytes → dendritic cells (the myeloid differentiation a
 
 ### Biological Interpretation
 
-The dominance of CD4+ T cells (46%) is expected in healthy donor PBMCs. Dendritic cells are a rare population (1.4%), correctly resolved as a distinct cluster despite low cell count. The monocyte population is predominantly classical (CD14+); nonclassical (FCGR3A+) monocytes were not resolved as a separate cluster at resolution 0.5 — they likely merge with the classical monocyte cluster. This is consistent with the resolution-sensitivity of FCGR3A+ monocyte separation observed in the literature.
+The dominance of CD4+ T cells (46%) is expected in healthy donor PBMCs. Dendritic cells are a rare population (1.4%), correctly resolved as a distinct cluster despite low cell count. The monocyte population is predominantly classical (CD14+); nonclassical (FCGR3A+) monocytes were not resolved as a separate cluster at resolution 0.5 - they likely merge with the classical monocyte cluster. This is consistent with the resolution-sensitivity of FCGR3A+ monocyte separation observed in the literature.
 
 Silhouette scores in single-cell data are typically low due to continuous rather than discrete cell states; the metric is used here for relative comparison between resolutions, not as an absolute quality measure.
 
@@ -169,14 +169,14 @@ pytest -v
 
 ## Design Decisions
 
-- **Doublet detection** — Scrublet integrated before QC filtering. 36 doublets detected (1.3%), 34 removed after other QC filters. Recommended by [Luecken & Theis (2019)](https://doi.org/10.15252/msb.20188746).
-- **Automated annotation** — Clusters scored against curated PBMC marker gene sets rather than manual inspection. The marker sets are themselves a subjective choice — but encoding them explicitly makes the annotation reproducible and auditable.
-- **Multi-resolution clustering** — Leiden at 5 resolutions with silhouette evaluation. The ≥5 cluster floor reflects the known minimum of major PBMC lineages (T cells, B cells, monocytes, NK, DCs).
-- **Trajectory inference** — PAGA provides a principled graph abstraction of cell-type connectivity. Diffusion pseudotime rooted in CD14+ monocytes because they are the most primitive myeloid progenitor in PBMCs — the expected starting point of the monocyte-to-DC differentiation axis.
-- **T cell subclustering** — Resolves CD4+/CD8+ populations that share CD3D/CD3E expression and cannot be separated at global clustering resolution.
-- **Colourblind-friendly palette** — Okabe-Ito colours throughout.
-- **Reproducible seeds** — `random_state=42` for UMAP, Leiden, Scrublet, and silhouette sampling.
-- **Dual-format figures** — PNG (300 DPI) for web, PDF (vector) for publication submission.
+- **Doublet detection** - Scrublet integrated before QC filtering. 36 doublets detected (1.3%), 34 removed after other QC filters. Recommended by [Luecken & Theis (2019)](https://doi.org/10.15252/msb.20188746).
+- **Automated annotation** - Clusters scored against curated PBMC marker gene sets rather than manual inspection. The marker sets are themselves a subjective choice - but encoding them explicitly makes the annotation reproducible and auditable.
+- **Multi-resolution clustering** - Leiden at 5 resolutions with silhouette evaluation. The ≥5 cluster floor reflects the known minimum of major PBMC lineages (T cells, B cells, monocytes, NK, DCs).
+- **Trajectory inference** - PAGA provides a principled graph abstraction of cell-type connectivity. Diffusion pseudotime rooted in CD14+ monocytes because they are the most primitive myeloid progenitor in PBMCs - the expected starting point of the monocyte-to-DC differentiation axis.
+- **T cell subclustering** - Resolves CD4+/CD8+ populations that share CD3D/CD3E expression and cannot be separated at global clustering resolution.
+- **Colourblind-friendly palette** - Okabe-Ito colours throughout.
+- **Reproducible seeds** - `random_state=42` for UMAP, Leiden, Scrublet, and silhouette sampling.
+- **Dual-format figures** - PNG (300 DPI) for web, PDF (vector) for publication submission.
 
 ## Limitations
 
@@ -184,7 +184,7 @@ pytest -v
 - **`regress_out` is debatable.** Used here following the original scanpy tutorial, but Luecken & Theis (2019) suggest regression may overcorrect for well-filtered cells.
 - **No pathway enrichment.** Gene set enrichment (via decoupler or GSEApy) would connect cell types to functional programmes. Planned as a future addition.
 - **FCGR3A+ monocytes not resolved.** At resolution 0.5, nonclassical monocytes merge with the CD14+ cluster. Higher resolution or targeted subclustering would separate them.
-- **Megakaryocytes not resolved.** The PBMC 3k dataset contains a small platelet/megakaryocyte population (PPBP+, PF4+) that merges with other clusters at this resolution. The canonical scanpy tutorial resolves 8 cell types from this dataset; our pipeline resolves 5 at the global level + 2 via T cell subclustering. The difference is resolution choice — we optimise for silhouette score rather than maximising cluster count.
+- **Megakaryocytes not resolved.** The PBMC 3k dataset contains a small platelet/megakaryocyte population (PPBP+, PF4+) that merges with other clusters at this resolution. The canonical scanpy tutorial resolves 8 cell types from this dataset; our pipeline resolves 5 at the global level + 2 via T cell subclustering. The difference is resolution choice - we optimise for silhouette score rather than maximising cluster count.
 
 ## Licence
 
