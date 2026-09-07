@@ -1,8 +1,9 @@
 """Step 06: PAGA trajectory inference and diffusion pseudotime."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import scanpy as sc
 
 RESULTS_DIR = Path("results")
 FIG_DIR = RESULTS_DIR / "figures"

@@ -1,11 +1,11 @@
 """Step 08: Generate publication-quality multi-panel figures."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-import pandas as pd
 from pathlib import Path
 
+import matplotlib.pyplot as plt
+import pandas as pd
+import scanpy as sc
+from matplotlib import gridspec
 from palette import PALETTE
 
 RESULTS_DIR = Path("results")

@@ -1,11 +1,12 @@
 """Generate an animated 3D UMAP rotation GIF for the README."""
 
-import scanpy as sc
+from io import BytesIO
+from pathlib import Path
+
+import imageio.v3 as iio
 import matplotlib.pyplot as plt
 import numpy as np
-import imageio.v3 as iio
-from pathlib import Path
-from io import BytesIO
+import scanpy as sc
 from palette import PALETTE
 
 RESULTS_DIR = Path("results")

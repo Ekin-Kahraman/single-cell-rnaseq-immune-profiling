@@ -1,8 +1,9 @@
 """Step 02: Normalise, find highly variable genes, and scale."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import scanpy as sc
 
 # --- Parameters ---
 TARGET_SUM = 1e4

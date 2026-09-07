@@ -1,8 +1,9 @@
 """Step 01: Load PBMC 3k dataset and perform quality control."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import scanpy as sc
 
 # --- Parameters ---
 MIN_GENES_PER_CELL = 200

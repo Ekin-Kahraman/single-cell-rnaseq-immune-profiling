@@ -1,9 +1,10 @@
 """Step 04: Leiden clustering at multiple resolutions with evaluation."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
-from sklearn.metrics import silhouette_score
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import scanpy as sc
+from sklearn.metrics import silhouette_score
 
 # --- Parameters ---
 RESOLUTIONS = [0.3, 0.5, 0.8, 1.0, 1.2]

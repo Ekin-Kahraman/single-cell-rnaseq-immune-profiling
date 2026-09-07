@@ -1,10 +1,11 @@
 """Slow-rotating 3D UMAP for profile banner. Clean, minimal, floaty."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
-import imageio.v3 as iio
-from pathlib import Path
 from io import BytesIO
+from pathlib import Path
+
+import imageio.v3 as iio
+import matplotlib.pyplot as plt
+import scanpy as sc
 from palette import PALETTE
 
 RESULTS_DIR = Path("results")

@@ -1,8 +1,9 @@
 """Step 07: Subcluster the T cell compartment to resolve CD4+/CD8+ populations."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import scanpy as sc
 
 RESULTS_DIR = Path("results")
 FIG_DIR = RESULTS_DIR / "figures"

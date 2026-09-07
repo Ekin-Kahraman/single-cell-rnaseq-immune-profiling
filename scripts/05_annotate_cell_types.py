@@ -1,9 +1,10 @@
 """Step 05: Marker gene identification and automated cell type annotation."""
 
-import scanpy as sc
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
-from pathlib import Path
+import scanpy as sc
 
 # --- Parameters ---
 N_MARKER_GENES = 25
@@ -35,8 +36,7 @@ def find_markers(adata):
     markers = markers[markers["pvals_adj"] < 0.05]
 
     n_per_cluster = markers.groupby("group").size()
-    print("Significant markers per cluster (log2FC > {:.1f}, padj < 0.05):".format(
-        np.log2(MIN_FOLD_CHANGE)))
+    print(f"Significant markers per cluster (log2FC > {np.log2(MIN_FOLD_CHANGE):.1f}, padj < 0.05):")
     for cluster, count in n_per_cluster.items():
         print(f"  Cluster {cluster}: {count} genes")
 

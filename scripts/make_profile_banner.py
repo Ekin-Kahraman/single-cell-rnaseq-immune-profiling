@@ -1,11 +1,12 @@
 """Generate an animated profile banner: UMAP atlas reveal + volcano plot."""
 
-import scanpy as sc
-import matplotlib.pyplot as plt
-import matplotlib.patheffects as pe
-import imageio.v3 as iio
-from pathlib import Path
 from io import BytesIO
+from pathlib import Path
+
+import imageio.v3 as iio
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+import scanpy as sc
 from palette import PALETTE
 
 RESULTS_DIR = Path("results")

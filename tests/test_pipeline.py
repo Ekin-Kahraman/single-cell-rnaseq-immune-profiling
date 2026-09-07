@@ -1,11 +1,11 @@
 """Tests for the single-cell RNA-seq pipeline."""
 
-import scanpy as sc
-import numpy as np
-from pathlib import Path
-
 # Import pipeline functions by path since filenames start with numbers
 import importlib.util
+from pathlib import Path
+
+import numpy as np
+import scanpy as sc
 
 
 def _import_script(name):

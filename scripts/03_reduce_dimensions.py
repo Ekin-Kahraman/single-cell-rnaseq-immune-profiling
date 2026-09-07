@@ -1,9 +1,10 @@
 """Step 03: PCA, neighbor graph, and UMAP embedding."""
 
-import scanpy as sc
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
-from pathlib import Path
+import scanpy as sc
 
 # --- Parameters ---
 N_PCS = 40
