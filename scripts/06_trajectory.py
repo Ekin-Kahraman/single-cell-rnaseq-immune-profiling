@@ -21,7 +21,7 @@ def compute_trajectory(adata):
     # Reinitialise UMAP using PAGA as initialisation for cleaner layout
     sc.tl.umap(adata, init_pos="paga", random_state=42)
 
-    # Diffusion pseudotime — root in CD14+ monocytes (most primitive in PBMC)
+    # Exploratory root choice; this does not establish a progenitor or lineage.
     sc.tl.diffmap(adata)
 
     # Find a root cell in CD14+ monocytes
