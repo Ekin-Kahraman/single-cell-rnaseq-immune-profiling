@@ -21,6 +21,13 @@ lint passed. Tests cover both analysis primitives and the project's execution,
 annotation and output-integrity contracts. The optional animation was generated
 from the same annotated cells.
 
+The subsequent display-label correction adds five regression tests (**23 total**).
+The 3D view now joins the 638 CD4-like and 559 CD8-like labels by cell ID from
+`07_t_cells.h5ad`; missing, duplicated or unrelated cells stop figure generation.
+The static summary shows the six broad populations and labels the mixed
+T-cell compartment simply as **T cells**. Neither display change alters the
+underlying annotation scores, clusters or subtype counts.
+
 The raw cached `.h5ad` input has SHA-256:
 
 ```text

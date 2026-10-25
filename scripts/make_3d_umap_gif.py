@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scanpy as sc
 from palette import PALETTE
+from visual_labels import refined_cell_types
 
 RESULTS_DIR = Path("results")
 DOCS_DIR = Path("docs")
@@ -79,13 +80,14 @@ def main():
     in_path = RESULTS_DIR / "05_annotated.h5ad"
     adata = sc.read_h5ad(in_path)
     print(f"Loaded {in_path}")
+    t_cells = sc.read_h5ad(RESULTS_DIR / "07_t_cells.h5ad")
+    cell_types = refined_cell_types(adata, t_cells)
 
     if "neighbors" not in adata.uns:
         sc.pp.neighbors(adata, n_neighbors=15, n_pcs=40)
 
     print("Computing 3D UMAP...")
     coords = compute_3d_umap(adata)
-    cell_types = adata.obs["cell_type"]
 
     print(f"Rendering {N_FRAMES} frames...")
     frames = []

@@ -49,12 +49,13 @@ monocytes, NK cells, B cells, dendritic cells and a 13-cell candidate
 megakaryocyte/platelet-like population.
 
 <p align="center">
-  <img src="docs/umap_3d_rotation.gif" alt="Rotating 3D UMAP of 2,604 blood cells, coloured by candidate immune-cell identity" width="600">
+  <img src="docs/umap_3d_rotation.gif" alt="Rotating 3D UMAP of 2,604 blood cells, showing broad immune groups and refined CD4-like and CD8-like T cells" width="600">
 </p>
 
 <p align="center">
   <strong>2,604 cells, viewed in 3D.</strong><br>
-  Colours show candidate immune-cell groups; positions summarise gene-expression similarity.
+  Colours reveal immune-cell groups and the refined CD4-like/CD8-like T-cell split.<br>
+  Positions summarise gene-expression similarity.
 </p>
 
 <details>

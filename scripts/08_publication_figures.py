@@ -7,6 +7,7 @@ import pandas as pd
 import scanpy as sc
 from matplotlib import gridspec
 from palette import PALETTE
+from visual_labels import broad_cell_types
 
 RESULTS_DIR = Path("results")
 FIG_DIR = RESULTS_DIR / "figures"
@@ -21,6 +22,9 @@ KEY_MARKERS = [
 
 def make_figure(adata):
     """Create a multi-panel publication figure."""
+    # Broad cluster assignments must not imply that every T cell is CD4+.
+    adata = adata.copy()
+    adata.obs["cell_type"] = broad_cell_types(adata)
     FIG_DIR.mkdir(parents=True, exist_ok=True)
 
     fig = plt.figure(figsize=(16, 10))

@@ -1,6 +1,9 @@
 """Shared Okabe-Ito colourblind-friendly palette for PBMC cell types."""
 
 PALETTE = {
+    "T cells": "#E69F00",
+    "CD4-like T cells": "#E69F00",
+    "CD8-like T cells": "#56B4E9",
     "CD4+ T cells": "#E69F00",
     "CD8+ T cells": "#56B4E9",
     "NK cells": "#009E73",
