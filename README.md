@@ -49,6 +49,18 @@ monocytes, NK cells, B cells, dendritic cells and a 13-cell candidate
 megakaryocyte/platelet-like population.
 
 <p align="center">
+  <img src="docs/umap_3d_rotation.gif" alt="Rotating 3D UMAP of 2,604 blood cells, coloured by candidate immune-cell identity" width="600">
+</p>
+
+<p align="center">
+  <strong>2,604 cells, viewed in 3D.</strong><br>
+  Colours show candidate immune-cell groups; positions summarise gene-expression similarity.
+</p>
+
+<details>
+<summary><strong>Full analysis figure — clusters, proportions and marker evidence</strong></summary>
+
+<p align="center">
   <img src="docs/publication_figure.png" alt="Reference analysis: cell clusters, marker-based labels, population sizes and marker-gene expression" width="900">
 </p>
 
@@ -56,6 +68,8 @@ The figure combines Leiden clusters, assigned cell types, their proportions and
 canonical marker expression. The labels reflect a marker-based analysis of a
 standard benchmark dataset, rather than new biological discoveries or an
 independent measurement of cell identity.
+
+</details>
 
 [Reference results](docs/reference_results.json) ·
 [Cell counts](docs/cell_type_composition.csv) ·
@@ -85,17 +99,7 @@ and are not independently measured CD4/CD8 ratios.
 
 </details>
 
-<details>
-<summary>Explore the cell groups in 3D</summary>
 
-<p align="center">
-  <img src="docs/umap_3d_rotation.gif" alt="Rotating 3D UMAP of the reference run, coloured by candidate immune-cell identity" width="600">
-</p>
-
-This is a separate three-dimensional UMAP of the same annotated cells. Embedding
-positions and distances are exploratory visual summaries, not physical locations.
-
-</details>
 
 ## What this project adds
 
