@@ -20,22 +20,31 @@ T_CELL_MARKERS = {
 
 def subcluster_t_cells(adata):
     """Extract T cell clusters and subcluster to resolve CD4+/CD8+."""
-    # Extract T cells (currently labelled as CD4+ T cells — CD8+ merged in)
-    t_mask = adata.obs["cell_type"] == "CD4+ T cells"
+    if "cell_type" not in adata.obs or adata.raw is None:
+        raise ValueError("T-cell subclustering requires cell_type labels and log-normalised adata.raw.")
+    # Include both broad T-cell labels if clustering resolves them separately.
+    t_mask = adata.obs["cell_type"].isin(["CD4+ T cells", "CD8+ T cells"])
     adata_t = adata[t_mask].copy()
+    if adata_t.n_obs < 4:
+        raise ValueError("T-cell subclustering requires at least four annotated T cells.")
+    if "X_pca" not in adata_t.obsm:
+        raise ValueError("T-cell subclustering requires the parent PCA representation.")
     print(f"Extracted {adata_t.n_obs} T cells for subclustering")
 
+    available = set(adata_t.raw.var_names)
+    cd4_genes = [g for g in ["IL7R", "CD4", "TCF7", "LEF1"] if g in available]
+    cd8_genes = [g for g in ["CD8A", "CD8B", "GZMK", "GZMA"] if g in available]
+    if not cd4_genes or not cd8_genes:
+        raise ValueError("Both CD4 and CD8 marker sets must have genes present in adata.raw.")
+
     # Recompute neighbours and UMAP on T cell subset
-    sc.pp.neighbors(adata_t, n_neighbors=15, n_pcs=20)
+    sc.pp.neighbors(adata_t, n_neighbors=min(15, adata_t.n_obs - 1),
+                    n_pcs=min(20, adata_t.obsm["X_pca"].shape[1]))
     sc.tl.umap(adata_t, random_state=42)
     sc.tl.leiden(adata_t, resolution=0.5, key_added="t_subcluster",
                  flavor="igraph", n_iterations=2, directed=False, random_state=42)
 
     # Score for CD4 vs CD8
-    available = set(adata_t.raw.var_names) if adata_t.raw else set(adata_t.var_names)
-    cd4_genes = [g for g in ["IL7R", "CD4", "TCF7", "LEF1"] if g in available]
-    cd8_genes = [g for g in ["CD8A", "CD8B", "GZMK", "GZMA"] if g in available]
-
     sc.tl.score_genes(adata_t, gene_list=cd4_genes, score_name="cd4_score", use_raw=True)
     sc.tl.score_genes(adata_t, gene_list=cd8_genes, score_name="cd8_score", use_raw=True)
 

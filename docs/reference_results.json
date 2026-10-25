@@ -1,0 +1,25 @@
+{
+  "dataset": "10x Genomics PBMC 3k",
+  "reference_date": "2026-10-25",
+  "raw_cells": 2700,
+  "retained_cells": 2604,
+  "highly_variable_genes": 2000,
+  "candidate_cell_types": {
+    "CD4+ T cells": 1197,
+    "CD14+ Monocytes": 623,
+    "NK cells": 407,
+    "B cells": 329,
+    "Dendritic cells": 35,
+    "Megakaryocytes": 13
+  },
+  "candidate_t_subtypes": {
+    "CD4+ T": 638,
+    "CD8+ T": 559
+  },
+  "leiden_resolution": 0.5,
+  "silhouette": 0.2187676727771759,
+  "python": "3.12.13",
+  "input_sha256": "f5ddd76da819fa241d7637754472cbf9067ebf18a27592383fec5df563d43a12",
+  "reference_environment": "requirements-lock.txt",
+  "interpretation": "Marker-based candidates from one healthy donor; not independent biological validation."
+}

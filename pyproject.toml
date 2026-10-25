@@ -35,9 +35,13 @@ dependencies = [
 Repository = "https://github.com/Ekin-Kahraman/single-cell-rnaseq-immune-profiling"
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.9"]
 viz = ["imageio>=2.14"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+
+# This is a repository-run workflow, not a distribution of generated datasets.
+[tool.setuptools]
+packages = []

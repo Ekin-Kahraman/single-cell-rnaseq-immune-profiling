@@ -49,7 +49,9 @@ def find_markers(adata):
 
 def score_cell_types(adata):
     """Score each cell for known cell type signatures and assign labels."""
-    available_genes = set(adata.raw.var_names) if adata.raw else set(adata.var_names)
+    if adata.raw is None or "leiden" not in adata.obs:
+        raise ValueError("Cell annotation requires Leiden labels and log-normalised adata.raw.")
+    available_genes = set(adata.raw.var_names)
 
     scores = {}
     for cell_type, genes in PBMC_MARKERS.items():
@@ -61,6 +63,9 @@ def score_cell_types(adata):
         sc.tl.score_genes(adata, gene_list=present, score_name=score_name, use_raw=True)
         scores[cell_type] = score_name
         print(f"  Scored {cell_type} ({len(present)}/{len(genes)} markers)")
+
+    if not scores:
+        raise ValueError("No cell-type signature has at least two markers present in adata.raw.")
 
     # Assign each cluster to the cell type with highest mean score
     cluster_labels = {}

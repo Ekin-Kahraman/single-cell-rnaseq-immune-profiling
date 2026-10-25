@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -37,6 +38,7 @@ REQUIRED_FILES = [
     "figures/08_publication_figure.png",
     "figures/08_publication_figure.pdf",
     "output_manifest.csv",
+    "run_metadata.json",
 ]
 
 
@@ -82,6 +84,8 @@ def validate_h5ad_outputs() -> None:
             raise SystemExit(f"Missing obs column in trajectory object: {col}")
     if adata.obs["cell_type"].nunique() < 5:
         raise SystemExit("Expected at least five annotated cell types")
+    if adata.obs["cell_type"].isna().any():
+        raise SystemExit("Some retained cells have no cell-type annotation")
 
     t_cells = sc.read_h5ad(RESULTS_DIR / "07_t_cells.h5ad")
     if t_cells.n_obs < 500:
@@ -94,11 +98,15 @@ def validate_tables() -> None:
     composition = pd.read_csv(RESULTS_DIR / "cell_type_composition.csv", index_col=0)
     if composition.empty:
         raise SystemExit("Cell type composition table is empty")
-    total = int(composition.iloc[:, 0].sum())
-
     adata = sc.read_h5ad(RESULTS_DIR / "05_annotated.h5ad")
-    if total != adata.n_obs:
-        raise SystemExit(f"Composition total {total} != annotated cells {adata.n_obs}")
+    expected = adata.obs["cell_type"].value_counts()
+    expected.index = expected.index.astype(str)
+    expected = expected.sort_index()
+    reported = composition.iloc[:, 0].sort_index()
+    if not reported.index.is_unique or not reported.index.equals(expected.index):
+        raise SystemExit("Composition cell-type labels do not match annotated cells")
+    if not (reported.to_numpy() == expected.to_numpy()).all():
+        raise SystemExit("Composition counts do not match the annotations for each cell type")
 
     markers = pd.read_csv(RESULTS_DIR / "marker_genes.csv")
     required_marker_cols = {"group", "names", "scores", "pvals_adj", "logfoldchanges"}
@@ -114,6 +122,9 @@ def main() -> None:
     validate_manifest()
     validate_h5ad_outputs()
     validate_tables()
+    record = json.loads((RESULTS_DIR / "run_metadata.json").read_text())
+    if record.get("status") != "complete":
+        raise SystemExit("The most recent pipeline run did not complete successfully")
     print("Validated single-cell pipeline outputs")
 
 
