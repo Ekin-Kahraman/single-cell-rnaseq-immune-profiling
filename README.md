@@ -162,7 +162,8 @@ python scripts/validate_outputs.py
 Tests cover the analysis primitives and project-specific failure cases: invalid
 resume requests, failed-stage handling, missing annotation evidence, retaining
 both T-cell parent labels, reduced-dimensional inputs and swapped composition
-counts. CI tests Python 3.10–3.12 and runs the full dataset using the pinned
+counts, plus missing checksum entries and duplicate manifest paths. CI tests
+Python 3.10–3.12 and runs the full dataset using the pinned
 Python 3.12 environment. Its analysis evidence is available as a workflow artifact.
 
 The public figures and numbers describe the reference run in
