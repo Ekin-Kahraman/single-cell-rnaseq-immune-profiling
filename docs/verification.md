@@ -28,6 +28,12 @@ The static summary shows the six broad populations and labels the mixed
 T-cell compartment simply as **T cells**. Neither display change alters the
 underlying annotation scores, clusters or subtype counts.
 
+Manifest-completeness checks add four regression cases (**27 total**). Validation
+requires a checksum entry for every required analysis artefact and rejects
+duplicate paths, so dropping a changed output from the manifest cannot hide it.
+Small file fixtures exercise these integrity checks without standing in for a
+scientific pipeline run.
+
 The raw cached `.h5ad` input has SHA-256:
 
 ```text

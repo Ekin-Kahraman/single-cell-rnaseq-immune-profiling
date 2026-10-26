@@ -63,8 +63,21 @@ def validate_manifest() -> None:
     required_cols = {"path", "bytes", "sha256"}
     if not required_cols.issubset(manifest.columns):
         raise SystemExit(f"Manifest missing columns: {required_cols - set(manifest.columns)}")
-    if len(manifest) < 20:
-        raise SystemExit("Manifest contains too few artefacts")
+
+    paths = [Path(value).resolve() for value in manifest["path"]]
+    if len(set(paths)) != len(paths):
+        raise SystemExit("Manifest contains duplicate artefact paths")
+
+    # The manifest cannot hash itself, and the runner finalises its metadata
+    # after stage 09. Every other required analysis output must be covered.
+    required_paths = {
+        (RESULTS_DIR / name).resolve()
+        for name in REQUIRED_FILES
+        if name not in {"output_manifest.csv", "run_metadata.json"}
+    }
+    missing = sorted(required_paths - set(paths))
+    if missing:
+        raise SystemExit(f"Manifest omits required outputs: {', '.join(map(str, missing))}")
 
     for row in manifest.itertuples(index=False):
         path = Path(row.path)
